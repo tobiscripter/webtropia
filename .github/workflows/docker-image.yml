@@ -17,7 +17,7 @@ jobs:
       uses: actions/checkout@v3
         
     - name: Build the Docker image
-      run: docker build . --file mysql/Dockerfile --tag mysql:$GITHUB_RUN_NUMBER
+      run: docker build . --file mysql/Dockerfile --tag ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER
     
     - name: Login to Docker Hub
       uses: docker/login-action@v2
@@ -26,6 +26,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
           
     - name: Push Image
-      run: docker push mysql:$GITHUB_RUN_NUMBER
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER
 
 
