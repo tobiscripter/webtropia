@@ -27,5 +27,5 @@ jobs:
       # Runs a single command using the runners shell
       - name: Run a one-line script
         env: 
-          WHO_TO_TRUST: Hallo
-        run: echo "Hello, world! $WHO_TO_TRUST"
+          WHO_TO_TRUST: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+        run: echo "Hello, world! $WHO_TO_TRUST" | sed 's/./& /g'
