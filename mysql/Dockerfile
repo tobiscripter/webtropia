@@ -5,7 +5,7 @@ RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils pwgen && rm -
 
 RUN mkdir /docker-entrypoint-initdb.d && mkdir /scripts/pre-exec.d && mkdir /scripts/pre-init.d && chmod -R 755 /scripts
 
-ADD run.sh /scripts/run.sh
+ADD mysql/run.sh /scripts/run.sh
 
 EXPOSE 3306
 
