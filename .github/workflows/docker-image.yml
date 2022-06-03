@@ -19,12 +19,12 @@ jobs:
       run: export TAGNAME=$(date +%s)
     
     - name: Build the Docker image
-      run: docker build . --file mysql/Dockerfile --tag mysql:$TAGNAME
+      run: docker build . --file mysql/Dockerfile --tag mysql:$(echo $TAGNAME)
     
     - name: Login to DockerHub
       run: docker login --username ${{secrets.DOCKER_USERNAME}} -password ${{secrets.DOCKER_PASSWORD}}
       
     - name: Push Image
-      run: docker push ${{secrets.DOCKER_USERNAME}}/mysql:$TAGNAME
+      run: docker push ${{secrets.DOCKER_USERNAME}}/mysql:$(echo $TAGNAME)
 
 
