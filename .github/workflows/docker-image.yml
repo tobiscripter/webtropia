@@ -9,19 +9,14 @@ on:
 jobs:
 
   build:
-
     runs-on: self-hosted
-
-    steps:  
-    
-      
+    steps:
     
     - name: checkout Repo
       uses: actions/checkout@v3
       
     - name: create MYSQL Root Password Secret
       run: echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" > MYSQL_ROOT_PASSWORD.txt
-
         
     - name: Build the Docker image
       run: docker build
