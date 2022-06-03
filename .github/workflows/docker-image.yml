@@ -18,4 +18,4 @@ jobs:
       run: docker build . --file mysql/Dockerfile --tag mysql:$(date +%s)
     
     - name: echo hello
-      run: echo "HI"
+      run: docker login --user ${{DOCKER_USERNAME}} -password ${{DOCKER_PASSWORD}}
