@@ -3,7 +3,10 @@ FROM alpine
 
 RUN apk add --no-cache mariadb mariadb-client mariadb-server-utils pwgen && rm -f /var/cache/apk/*
 
-RUN mkdir /docker-entrypoint-initdb.d && mkdir /scripts/pre-exec.d && mkdir /scripts/pre-init.d && chmod -R 755 /scripts
+RUN mkdir -p /docker-entrypoint-initdb.d
+RUN mkdir -p /scripts/pre-exec.d 
+RUN mkdir -p /scripts/pre-init.d 
+RUN chmod -R 755 /scripts
 
 ADD mysql/run.sh /scripts/run.sh
 
