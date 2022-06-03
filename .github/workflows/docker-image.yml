@@ -21,9 +21,9 @@ jobs:
       uses: actions/checkout@v3
         
     - name: Build the Docker image
-      run: docker build . \
-            --file mysql/Dockerfile \
-            --tag ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER \
+      run: docker build .
+            --file mysql/Dockerfile 
+            --tag ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER 
             --secret id=MYSQL_ROOT_PASSWORD,src=MYSQL_ROOT_PASSWORD.txt
     
     - name: Login to Docker Hub
