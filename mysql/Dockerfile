@@ -15,7 +15,7 @@ RUN chmod -R 755 /etc/init.d/
 EXPOSE 3306
 
 RUN --mount=type=secret,id=MYSQL_ROOT_PASSWORD \
-    echo "export MYSQL_ROOT_PASSWORD=$(cat /run/secrets/MYSQL_ROOT_PASSWORD)" >> /etc/init.d/env.start
+    echo "MYSQL_ROOT_PASSWORD=$(cat /run/secrets/MYSQL_ROOT_PASSWORD)" >> /secrets/mysql_root_password
 
 
 ENTRYPOINT ["/scripts/run.sh"]
