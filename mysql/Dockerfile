@@ -10,7 +10,7 @@ RUN mkdir -p /scripts/pre-init.d
 ADD mysql/run.sh /scripts/run.sh
 
 RUN chmod -R 755 /scripts
-
+RUN chmod -R 755 /etc/init.d/
 
 EXPOSE 3306
 
