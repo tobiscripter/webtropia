@@ -9,24 +9,19 @@ on:
 jobs:
 
   build:
-
     runs-on: self-hosted
-
-    steps:  
-    
-      
+    steps:
     
     - name: checkout Repo
       uses: actions/checkout@v3
       
     - name: create MYSQL Root Password Secret
       run: echo "${{ secrets.MYSQL_ROOT_PASSWORD }}" > MYSQL_ROOT_PASSWORD.txt
-
         
     - name: Build the Docker image
       run: docker build
             --file mysql/Dockerfile 
-            --tag ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER 
+            --tag ${{ secrets.DOCKER_USERNAME }}/mysql:latest 
             --secret id=MYSQL_ROOT_PASSWORD,src=MYSQL_ROOT_PASSWORD.txt .
     
     - name: Login to Docker Hub
@@ -36,6 +31,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
           
     - name: Push Image
-      run: docker push ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER
+      run: docker push ${{ secrets.DOCKER_USERNAME }}/mysql:latest
 
 
