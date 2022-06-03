@@ -24,7 +24,7 @@ jobs:
 
         
     - name: Build the Docker image
-      run: docker build .
+      run: docker build
             --file mysql/Dockerfile 
             --tag ${{ secrets.DOCKER_USERNAME }}/mysql:$GITHUB_RUN_NUMBER 
             --secret id=MYSQL_ROOT_PASSWORD,src=MYSQL_ROOT_PASSWORD.txt
