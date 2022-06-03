@@ -19,7 +19,7 @@ jobs:
       run: export TAGNAME=$(date +%s)
       
     - name: display Tag Name
-      run: echo $TAGNAME
+      run: echo "HI $TAGNAME"
     
     - name: Build the Docker image
       run: docker build . --file mysql/Dockerfile --tag mysql:$(echo $TAGNAME)
