@@ -26,7 +26,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
           
     - name: Push Image
-      run: echo "${{secrets.DOCKER_USERNAME}}/mysql:$GITHUB_RUN_NUMBER" &&
-           docker push ${{secrets.DOCKER_USERNAME}}/mysql:$GITHUB_RUN_NUMBER
+      run: docker push mysql:$GITHUB_RUN_NUMBER
 
 
