@@ -14,6 +14,7 @@ RUN chmod -R 755 /etc/init.d/
 
 EXPOSE 3306
 
+RUN mkdir secrets
 RUN --mount=type=secret,id=MYSQL_ROOT_PASSWORD \
     echo "MYSQL_ROOT_PASSWORD=$(cat /run/secrets/MYSQL_ROOT_PASSWORD)" >> /secrets/mysql_root_password
 
