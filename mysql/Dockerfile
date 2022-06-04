@@ -24,4 +24,7 @@ RUN --mount=type=secret,id=MYSQL_USER \
 RUN --mount=type=secret,id=MYSQL_PASSWORD \
     echo "$(cat /run/secrets/MYSQL_PASSWORD)" >> /secrets/mysql_password
 
+RUN --mount=type=secret,id=MYSQL_DB \
+    echo "$(cat /run/secrets/MYSQL_DB)" >> /secrets/mysql_db
+
 ENTRYPOINT ["/scripts/run.sh"]
