@@ -1,7 +1,9 @@
 #!/bin/sh
 
 export MYSQL_ROOT_PASSWORD=$(cat /secrets/mysql_root_password)
-export A=5
+
+export MYSQL_USER=$(cat /secrets/mysql_user)
+export MYSQL_PASSWORD=$(cat /secrets/mysql_password)
 
 # execute any pre-init scripts
 for i in /scripts/pre-init.d/*sh
@@ -101,3 +103,4 @@ done
 
 
 exec /usr/bin/mysqld --user=mysql --console --skip-name-resolve --skip-networking=0 $@
+

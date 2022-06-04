@@ -18,5 +18,10 @@ RUN mkdir secrets
 RUN --mount=type=secret,id=MYSQL_ROOT_PASSWORD \
     echo "$(cat /run/secrets/MYSQL_ROOT_PASSWORD)" >> /secrets/mysql_root_password
 
+RUN --mount=type=secret,id=MYSQL_USER \
+    echo "$(cat /run/secrets/MYSQL_USER)" >> /secrets/mysql_user
+
+RUN --mount=type=secret,id=MYSQL_PASSWORD \
+    echo "$(cat /run/secrets/MYSQL_PASSWORD)" >> /secrets/mysql_password
 
 ENTRYPOINT ["/scripts/run.sh"]
