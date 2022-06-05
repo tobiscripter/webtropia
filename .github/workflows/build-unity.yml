@@ -30,7 +30,7 @@ jobs:
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
           targetPlatform: Android
-          projectPath: /frontend/
+          projectPath: frontend/
       - uses: actions/upload-artifact@v2
         with:
           name: Build
