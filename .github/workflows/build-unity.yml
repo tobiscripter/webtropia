@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Unity Build
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -22,27 +22,11 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: set rights
-        run: sudo chown -R $USER:$USER $GITHUB_WORKSPACE
-      # Cleanup
-      - name: "Freeing up disk space for build"
-        run: |
-          echo "############################################"
-          echo "#    Freeing up disk space on CI system    #"
-          echo "############################################"
-          echo -n "Disk space before:"
-          df -h / --output=avail | tail -1
-          # https://github.com/apache/flink/blob/master/tools/azure-pipelines/free_disk_space.sh
-          rm -rf /usr/share/dotnet/
-          # https://github.com/actions/virtual-environments/issues/709#issuecomment-612569242
-          rm -rf "/usr/local/share/boost"
-          rm -rf "$AGENT_TOOLSDIRECTORY"
-          echo -n "Disk space after:"
-          df -h / --output=avail | tail -1
-          
-          
       - uses: actions/checkout@v2
-
+      
+      - name: cleanup #https://github.com/actions/checkout/issues/211
+        run: sudo chown -R $USER:$USER
+        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: game-ci/unity-builder@v2
         env:
@@ -56,5 +40,3 @@ jobs:
         with:
           name: Build
           path: build
-
-          
