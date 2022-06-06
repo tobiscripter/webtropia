@@ -25,7 +25,7 @@ jobs:
       - uses: actions/checkout@v2
       
       - name: cleanup #https://github.com/actions/checkout/issues/211
-        run: sudo chown -R $USER:$USER
+        run: sudo chown -R $USER:$USER .
         
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: game-ci/unity-builder@v2
