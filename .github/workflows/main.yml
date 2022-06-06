@@ -30,6 +30,7 @@ jobs:
         uses: kuler90/setup-unity@v1
         with:
           unity-modules: android
+          project-path: frontend/
 
       - name: Activate Unity
         uses: kuler90/activate-unity@v1
