@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: Build Android
+name: CI
 
 # Controls when the workflow will run
 on:
@@ -18,25 +18,30 @@ jobs:
   # This workflow contains a single job called "build"
   build:
     # The type of runner that the job will run on
-    runs-on: self-hosted
+    runs-on: ubuntu-latest
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      - name: cleanup #https://github.com/actions/checkout/issues/211
-        run: sudo chown -R $USER:$USER /gitrunner/
-        
-      - uses: actions/checkout@v2.3.4
-        
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
-      - uses: game-ci/unity-builder@v2
-        env:
-          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
-          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
-          UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
+      - name: Checkout project
+        uses: actions/checkout@v2
+
+      - name: Setup Unity
+        uses: kuler90/setup-unity@v1
         with:
-          targetPlatform: Android
-          projectPath: frontend/
-      - uses: actions/upload-artifact@v2
+          unity-modules: android
+          project-path: frontend/
+
+      - name: Activate Unity
+        uses: kuler90/activate-unity@v1
         with:
-          name: Build
-          path: build
+          unity-username: ${{ secrets.UNITY_EMAIL }}
+          unity-password: ${{ secrets.UNITY_PASSWORD }}
+          unity-authenticator-key: ${{ secrets.UNITY_SERIAL }}
+
+      - name: Build Unity
+        uses: kuler90/build-unity@v1
+        with:
+          build-target: Android
+          build-path: ./build.apk
+          project-path: frontend/
