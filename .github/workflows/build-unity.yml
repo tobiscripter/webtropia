@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: CI
+name: Unity Build
 
 # Controls when the workflow will run
 on:
@@ -20,22 +20,10 @@ jobs:
     # The type of runner that the job will run on
     runs-on: self-hosted
 
-    strategy:
-      fail-fast: false
-      matrix:
-        targetPlatform:
-          - iOS # Build an iOS player.
-          - Android # Build an Android .apk standalone app.
-          
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
       - uses: actions/checkout@v2
 
-      - uses: actions/cache@v2
-        with:
-          path: Library
-          key: Library-${{ matrix.targetPlatform }}
-          restore-keys: Library-
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: game-ci/unity-builder@v2
         env:
@@ -51,4 +39,3 @@ jobs:
           path: build
 
           
-      
