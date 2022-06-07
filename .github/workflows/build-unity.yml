@@ -20,6 +20,12 @@ jobs:
     # The type of runner that the job will run on
     #runs-on: self-hosted
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        targetPlatform:
+          - iOS # Build an iOS player.
+          - Android # Build an Android .apk standalone app.
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
@@ -35,9 +41,10 @@ jobs:
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
           UNITY_SERIAL: ${{ secrets.UNITY_SERIAL }}
         with:
-          targetPlatform: Android
+          targetPlatform: ${{ matrix.targetPlatform }}
           projectPath: frontend/
+
       - uses: actions/upload-artifact@v2
         with:
-          name: Build
-          path: build
+          name: Build-${{ matrix.targetPlatform }}
+          path: build/${{ matrix.targetPlatform }}
