@@ -7,7 +7,7 @@ on:
     branches: [ "master" ]
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: ${{ github.repository }}
+  IMAGE_NAME: ${{ github.repository }}_dotnet
 
 jobs:
   build-and-push-image:
