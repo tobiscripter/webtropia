@@ -15,7 +15,7 @@ ENV PATH $PATH:/root/.dotnet
 ENV DOTNET_CLI_TELEMETRY_OPTOUT 1
 RUN dotnet --version
 
-COPY API /app
+COPY backend/API /app
 
 EXPOSE 2000
 
