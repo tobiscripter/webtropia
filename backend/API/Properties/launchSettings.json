@@ -8,7 +8,8 @@
       "sslPort": 44384
     }
   },
-  "profiles": {
+  "profiles": 
+  {
     "API": {
       "commandName": "Project",
       "dotnetRunMessages": true,
