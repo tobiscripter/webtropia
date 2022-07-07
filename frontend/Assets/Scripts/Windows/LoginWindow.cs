@@ -26,7 +26,7 @@ public class LoginWindow : Window
 
     public override async Task Init()
     {
-        string s = await NetworkManager.get("www.google.com");
+        string s = await NetworkManager.Get("https://89.163.208.69:2000/");
         Debug.Log(s);
 
         open = true;

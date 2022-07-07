@@ -8,7 +8,7 @@ using System;
 
 public static class NetworkManager
 {
-    public static async Task<string> get(string url)
+    public static async Task<string> Get(string url)
     {
         try
         {

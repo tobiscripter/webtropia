@@ -15,7 +15,7 @@ public class RegisterWindow : Window
     
     public override async Task Init()
     {
-        string s = await NetworkManager.get("www.google.com");
+        string s = await NetworkManager.Get("www.google.com");
         Debug.Log(s);
 
         open = true;

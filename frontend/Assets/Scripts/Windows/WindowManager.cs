@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using System.Reflection;
 public class WindowManager : MonoBehaviour
 {
-    public static List<Window> windows; 
+    public static List<Window> windows = new List<Window>(); 
 
     public static string startID = "LOGIN";
     async void Start()
@@ -15,6 +15,16 @@ public class WindowManager : MonoBehaviour
 
         Debug.Log(windowClasses.Count());
 
+
+        foreach(var c in windowClasses)
+        {
+            var objects = FindObjectsOfType(c);
+            foreach(var o in objects)
+            {
+                Debug.Log(o);
+                windows.Add((Window)o);
+            }
+        }
         foreach(Window w in windows)
             await w.Hide();
 
