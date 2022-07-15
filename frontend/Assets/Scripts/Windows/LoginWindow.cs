@@ -17,23 +17,16 @@ public class LoginWindow : Window
     {
         string e = email.text;
         string p = password.text;
-
-        Debug.Log($"{e} {p}");
+        
+        
 
         await Task.CompletedTask;
     }
 
 
-    public override async Task Init()
+    private void Start()
     {
-        string s = await NetworkManager.Get("https://89.163.208.69:2000/");
-        Debug.Log(s);
-
-        open = true;
-        gameObject.SetActive(false);
-
         login.onClick.AddListener(async () => {await Login();});
         register.onClick.AddListener(async () => {await WindowManager.Navigate("REGISTER");});
-        
     }
 }

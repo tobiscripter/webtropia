@@ -42,6 +42,15 @@ public class DB : IDisposable
         return await cmd.ExecuteReaderAsync();
     }
 
+    public static async Task<int> execSQL(string sql)
+    {
+        return await execSQL(await getCommand(sql));
+    }
+    public static async Task<int> execSQL(MySqlCommand cmd)
+    {
+        return await cmd.ExecuteNonQueryAsync();
+    }
+
     public static async Task<string> readJSONSQL(string sql)
     {
         return getJSON(await readSQL(sql));

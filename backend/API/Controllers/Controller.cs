@@ -3,8 +3,8 @@ using System.Text.Json;
 namespace test.Controllers;
 
 [ApiController]
-[Route("[controller]")]
-public class Controller : ControllerBase
+[Route("")]
+public class MainController : ControllerBase
 {
 
     [HttpGet]

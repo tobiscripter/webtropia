@@ -6,36 +6,41 @@ using System.Threading.Tasks;
 using System.Reflection;
 public class WindowManager : MonoBehaviour
 {
-    public static List<Window> windows = new List<Window>(); 
+    public static Dictionary<string,Window> windows = new Dictionary<string, Window>(); 
 
     public static string startID = "LOGIN";
+    public static string errorWindowID = "ERROR";
     async void Start()
     {
         var windowClasses = Assembly.GetAssembly(typeof(Window)).GetTypes().Where(myType => myType.IsClass && !myType.IsAbstract && myType.IsSubclassOf(typeof(Window)));
-
-        Debug.Log(windowClasses.Count());
-
 
         foreach(var c in windowClasses)
         {
             var objects = FindObjectsOfType(c);
             foreach(var o in objects)
             {
-                Debug.Log(o);
-                windows.Add((Window)o);
+                Window w = (Window) o;
+                windows[w.GetID()] = w;
             }
         }
-        foreach(Window w in windows)
-            await w.Hide();
+        //foreach(Window w in windows.Values)
+        //    await w.Hide();
 
-        await windows.First(w => w.name == startID).InitAndOpen();
+        await windows[startID].InitAndOpen();
                 
     }
 
    public static async Task Navigate(string id)
    {
-        windows.Where(w => w.open && w.name != id).Select(async (w) => {await w.Close(); });
-        await windows.First( w => w.name == id).InitAndOpen();
+
+        windows.Values.Where(w => w.open && w.GetID() != id).ToList().ForEach(async w => await w.Hide());
+
+        await windows[id].InitAndOpen();
+   }
+
+   public static async Task Error(string error)
+   {
+        await windows[errorWindowID].InitAndOpen(error);
    }
 
 }
@@ -46,21 +51,38 @@ public abstract class Window : MonoBehaviour
 {
     public abstract string GetID();
 
-    public bool open;
+    public bool open, init = false;
 
     public virtual async Task Open() 
     {
-        gameObject.SetActive(true);
+        Animation anim = gameObject.GetComponent<Animation>();
+        if(anim)
+        {
+            anim.Play("Open-LR");
+            while(anim.isPlaying) await Task.Yield();
+        }
+        else
+        {
+            transform.GetChild(0).gameObject.SetActive(true);
+        }
         open = true;
-        await Task.CompletedTask;
     }
     public virtual async Task Close() 
     {
-        gameObject.SetActive(false);
+        Animation anim = gameObject.GetComponent<Animation>();
+        if(anim)
+        {
+            anim.Play("Close-LR");
+            while(anim.isPlaying) await Task.Yield();
+        }
+        else
+        {
+            transform.GetChild(0).gameObject.SetActive(false);
+        }
         open = false;
-        await Task.CompletedTask;
     }    
     public virtual Task Init() {return Task.CompletedTask;}
+    public virtual Task Init(string s) {return Task.CompletedTask;}
     public virtual async Task Hide() 
     {
         await Close();
@@ -69,6 +91,12 @@ public abstract class Window : MonoBehaviour
     public async virtual Task InitAndOpen()
     {
         await Init();
+        await Open();
+    }
+
+    public async virtual Task InitAndOpen(string s)
+    {
+        await Init(s);
         await Open();
     }
 }

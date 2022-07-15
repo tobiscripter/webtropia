@@ -7,18 +7,31 @@ using System.Threading.Tasks;
 public class RegisterWindow : Window
 {
     public TMPro.TMP_InputField username, password, email;
-    public Button register;
+    public Button register, login;
     public override string GetID()
     {
         return "REGISTER";
     }
-    
-    public override async Task Init()
-    {
-        string s = await NetworkManager.Get("www.google.com");
-        Debug.Log(s);
 
-        open = true;
-        gameObject.SetActive(false);
+    async Task Register()
+    {
+        Dictionary<string,string> form = new Dictionary<string, string>()
+        {
+            {"email", email.text},
+            {"username", username.text},
+            {"password", password.text}
+        };
+
+        Debug.Log(form.Count);
+
+        string s = await NetworkManager.Post(AppSettings.API_URL + "account", form);
+
+        Debug.Log(s);
+    }
+    
+    private void Start()
+    {
+        register.onClick.AddListener(async () => {await WindowManager.Navigate("LOGIN");});
+        login.onClick.AddListener(async () => {await Register();});
     }
 }

@@ -24,7 +24,7 @@ public static class Theme
 
     public enum Colors 
     {
-        main, background, text, accent
+        main, background, text, accent, error
     }
     public static Dictionary<string,Color> themes = new Dictionary<string, Color>()
     {
@@ -32,6 +32,7 @@ public static class Theme
         {"background", hex("#233153") },
         {"text", hex("#f5f5f5") },
         {"accent", hex("#d84e31") },
+        {"error", hex("#ff0000") },
     };
 
     private static Color hex(string color)
