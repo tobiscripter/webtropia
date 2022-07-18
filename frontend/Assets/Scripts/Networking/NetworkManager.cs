@@ -8,14 +8,18 @@ using System;
 
 public static class NetworkManager
 {
-    public static async Task<string> Get(string url)
+
+
+    public static async Task<UnityWebRequest> GetWR(string url)
     {
         try
         {
-            using var www = UnityWebRequest.Get(url);
+            var www = UnityWebRequest.Get(url);
 
-            www.SetRequestHeader("email", UserInformation.email);
-            www.SetRequestHeader("password", UserInformation.password);
+            if(UserInformation.email != null)
+                www.SetRequestHeader("email", UserInformation.email);
+            if(UserInformation.password != null)
+                www.SetRequestHeader("password", UserInformation.password);
 
             var operation = www.SendWebRequest();
 
@@ -25,9 +29,10 @@ public static class NetworkManager
             if (www.result != UnityWebRequest.Result.Success)
             {
                 Debug.LogError($"{url} Failed: {www.error}");
+                Debug.LogError(www.downloadHandler.text);
                 await WindowManager.Error(www.error);
             }
-            return www.downloadHandler.text;
+            return www;
         }
         catch (Exception ex)
         {
@@ -36,11 +41,11 @@ public static class NetworkManager
         }
     }
 
-    public static async Task<string> Post(string url, Dictionary<string, string> form)
+    public static async Task<UnityWebRequest> PostWR(string url, Dictionary<string, string> form)
     {
         try
         {
-            using var www = UnityWebRequest.Post(url, form);
+            var www = UnityWebRequest.Post(url, form);
 
             if(UserInformation.email != null)
             www.SetRequestHeader("email", UserInformation.email);
@@ -57,7 +62,7 @@ public static class NetworkManager
                 Debug.LogError($"{url} Failed: {www.error}");
                 await WindowManager.Error(www.error);
             }
-            return www.downloadHandler.text;
+            return www;
         }
         catch (Exception ex)
         {
@@ -66,4 +71,13 @@ public static class NetworkManager
         }
     }
 
+    public static async Task<string> Get(string url)
+    {
+        return (await GetWR(url)).downloadHandler.text;
+    }
+
+    public static async Task<string> Post(string url,Dictionary<string, string> form)
+    {
+        return (await PostWR(url, form)).downloadHandler.text;
+    }
 }

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using System.Threading.Tasks;
+using UnityEngine.Networking;
+using Newtonsoft.Json.Linq;
 
 public class RegisterWindow : Window
 {
@@ -22,11 +24,26 @@ public class RegisterWindow : Window
             {"password", password.text}
         };
 
-        Debug.Log(form.Count);
+        await WindowManager.StartLoading();
+        UnityWebRequest s = await NetworkManager.PostWR(AppSettings.API_URL + "account", form);
 
-        string s = await NetworkManager.Post(AppSettings.API_URL + "account", form);
+        await WindowManager.StopLoading();
 
-        Debug.Log(s);
+        if(s.result != UnityWebRequest.Result.Success)
+            return;
+        
+        UserInformation.email = form["email"];
+        UserInformation.password = form["password"];
+        UserInformation.username = form["username"];
+
+        JObject res = JObject.Parse(s.downloadHandler.text);
+        UserInformation.privateKey = (string)res["privateKey"];
+        UserInformation.publicKey = (string)res["publicKey"];
+
+        UserInformation.Save();
+
+        await WindowManager.Navigate("MENU");
+
     }
     
     private void Start()

@@ -24,11 +24,23 @@ public class AccountController : ControllerBase
 
 
     [HttpGet("")]
-    public async Task<IActionResult> Login([FromForm]string email, [FromForm]string password)
+    public async Task<IActionResult> Login([FromHeader]string email, [FromHeader]string password)
     {
-        if(await GetID(email, password) == 0) return Unauthorized();
+        var cmd = await DB.getCommand("SELECT ID, PASSWORD, SALT, PRIVATE_KEY, PUBLIC_KEY, USERNAME FROM USER WHERE EMAIL = @email;");
+        cmd.Parameters.AddWithValue("@email", email);
 
-        return Ok();
+        var r = await DB.readSQL(cmd);
+        await r.ReadAsync();
+        var pass = r.GetString("PASSWORD");
+        var salt = r.GetString("SALT");
+        var id = r.GetInt32("ID");
+        var privateKey = r.GetString("PRIVATE_KEY");
+        var publicKey = r.GetString("PUBLIC_KEY");
+        var username = r.GetString("USERNAME");
+
+        if(Encryption.HashPassword(password, salt) != pass) return Unauthorized();
+
+        return Ok(new {privateKey= privateKey, publicKey = publicKey, id = id, username=username});
 
     }
 
@@ -39,7 +51,6 @@ public class AccountController : ControllerBase
         string salt = Encryption.generateSalt();
         string hashedPassword = Encryption.HashPassword(password, salt);
         string encryptedPrivateKey = Encryption.SymmetricEncrypt(password, rsa.private_key);
-        password = "AAAAAAAAAAAAAAAAAAAAAAAAA"; //remove plaintext password from memory
 
         var cmd = await DB.getCommand("INSERT INTO USER (TYPE, EMAIL, USERNAME, PASSWORD, SALT, PUBLIC_KEY, PRIVATE_KEY) VALUES(\"USER\", @email, @username, @password, @salt, @public_key, @private_key)");
         cmd.Parameters.AddWithValue("@email", email);
@@ -49,7 +60,11 @@ public class AccountController : ControllerBase
         cmd.Parameters.AddWithValue("@public_key", rsa.public_key);
         cmd.Parameters.AddWithValue("@private_key", encryptedPrivateKey);
 
-        return Ok(await DB.execSQL(cmd));
+
+        int id = await GetID(email, password);
+
+        await DB.execSQL(cmd);
+        return Ok(new {privateKey= rsa.private_key, publicKey = rsa.public_key, id = id});
     }
 
 

@@ -18,7 +18,7 @@ public class ChatController : ControllerBase
     }
 
     [HttpPost("")]
-    public async Task<IActionResult> Create(string name, string type, string description, string tags, [FromHeader]string email, [FromHeader]string password)
+    public async Task<IActionResult> Create([FromForm]string name, [FromForm]string type, [FromForm]string description,[FromForm] string tags, [FromHeader]string email, [FromHeader]string password)
     {
         int id = await AccountController.GetID(email, password);
         if(id == 0) return Unauthorized();
